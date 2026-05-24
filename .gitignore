@@ -1,1 +1,5 @@
 .DS_Store
+
+/backend/.venv
+start_servers.bat
+backend/__pycache__/main.cpython-311.pyc
