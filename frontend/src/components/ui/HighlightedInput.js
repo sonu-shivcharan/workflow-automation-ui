@@ -7,6 +7,7 @@ import {
   getSourceHandleId,
 } from "../../nodeConfig";
 import { useUpdateNodeInternals } from "reactflow";
+import { AutocompleteMenu } from "./AutocompleteMenu";
 
 export const HighlightedInput = ({
   value = "{{input}}",
@@ -289,28 +290,13 @@ export const HighlightedInput = ({
       </div>
 
       {showMenu && (
-        <div
-          className="autocomplete-menu"
-          style={{
-            top: menuPosition.top,
-            left: menuPosition.left,
-          }}
-        >
-          {filteredVariables.map((variable, idx) => (
-            <div
-              key={variable}
-              className={`autocomplete-item ${idx === selectedIndex ? "selected" : ""}`}
-              onMouseDown={(e) => {
-                // Prevent onBlur of textarea from hiding the menu before click event completes
-                e.preventDefault();
-                insertVariable(variable);
-              }}
-              onMouseEnter={() => setSelectedIndex(idx)}
-            >
-              {variable}
-            </div>
-          ))}
-        </div>
+        <AutocompleteMenu
+          position={menuPosition}
+          variables={filteredVariables}
+          selectedIndex={selectedIndex}
+          onSelectVariable={insertVariable}
+          onHoverVariable={setSelectedIndex}
+        />
       )}
     </div>
   );
