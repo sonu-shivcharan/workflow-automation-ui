@@ -49,9 +49,7 @@ function BaseNode({
       <div className="base-node-header">
         <div className="base-node-title-container">
           {icon && <span className="base-node-icon">{icon}</span>}
-          <span className="base-node-title">
-            {type}
-          </span>
+          <span className="base-node-title">{type}</span>
         </div>
         {onDelete && (
           <button
@@ -68,9 +66,7 @@ function BaseNode({
       <div className="base-node-body">
         {/* Standard Node Name Input */}
         <div className="base-node-input-container">
-          <label className="base-node-label">
-            Node Name
-          </label>
+          <label className="base-node-label">Node Name</label>
           <input
             type="text"
             value={nodeName}

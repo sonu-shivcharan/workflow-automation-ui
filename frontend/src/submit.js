@@ -1,5 +1,5 @@
 import { Button } from "./components/ui/button";
-import { useStore } from './store';
+import { useStore } from "./store";
 
 export const SubmitButton = () => {
   const nodes = useStore((state) => state.nodes);
@@ -8,10 +8,10 @@ export const SubmitButton = () => {
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append('pipeline', JSON.stringify({ nodes, edges }));
+      formData.append("pipeline", JSON.stringify({ nodes, edges }));
 
-      const response = await fetch('http://localhost:8000/pipelines/parse', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/pipelines/parse", {
+        method: "POST",
         body: formData,
       });
 
@@ -20,10 +20,14 @@ export const SubmitButton = () => {
       }
 
       const data = await response.json();
-      alert(`Pipeline parsed successfully!\n\nNumber of Nodes: ${data.num_nodes}\nNumber of Edges: ${data.num_edges}\nIs DAG: ${data.is_dag}`);
+      alert(
+        `Pipeline parsed successfully!\n\nNumber of Nodes: ${data.num_nodes}\nNumber of Edges: ${data.num_edges}\nIs DAG: ${data.is_dag}`,
+      );
     } catch (error) {
-      console.error('Error submitting pipeline:', error);
-      alert('Error connecting to the backend. Please ensure the backend is running on http://localhost:8000.');
+      console.error("Error submitting pipeline:", error);
+      alert(
+        "Error connecting to the backend. Please ensure the backend is running on http://localhost:8000.",
+      );
     }
   };
 
@@ -35,7 +39,9 @@ export const SubmitButton = () => {
         justifyContent: "center",
       }}
     >
-      <Button variant="outline" size="lg" onClick={handleSubmit}>Submit</Button>
+      <Button variant="outline" size="lg" onClick={handleSubmit}>
+        Submit
+      </Button>
     </div>
   );
 };

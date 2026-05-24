@@ -7,7 +7,7 @@ import { useStore } from "../store";
 export const InputNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
   const [currName, setCurrName] = useState(
-    data?.inputName || id.replace("customInput-", "input_")
+    data?.inputName || id.replace("customInput-", "input_"),
   );
   const [inputType, setInputType] = useState(data.inputType || "Text");
 

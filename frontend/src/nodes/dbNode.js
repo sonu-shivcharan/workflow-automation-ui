@@ -8,7 +8,7 @@ export const DbNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
 
   const [currName, setCurrName] = useState(
-    data?.dbName || id.replace("db-", "db_")
+    data?.dbName || id.replace("db-", "db_"),
   );
   const [query, setQuery] = useState(data?.query || "SELECT * FROM users");
 

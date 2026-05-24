@@ -7,7 +7,7 @@ import { useStore } from "../store";
 export const OutputNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
   const [currName, setCurrName] = useState(
-    data?.outputName || id.replace("customOutput-", "output_")
+    data?.outputName || id.replace("customOutput-", "output_"),
   );
   const [outputType, setOutputType] = useState(data.outputType || "Text");
 
@@ -24,7 +24,7 @@ export const OutputNode = ({ id, data }) => {
   };
 
   const handles = [
-    { type: "target", position: Position.Left, id: `${id}-value` }
+    { type: "target", position: Position.Left, id: `${id}-value` },
   ];
 
   return (

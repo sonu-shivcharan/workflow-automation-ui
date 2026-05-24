@@ -19,7 +19,6 @@ export const TextNode = ({ id, data }) => {
   };
 
   const handles = [
-    // Dynamically generate a target handle for each unique variable
     ...variables.map((variable) => ({
       type: "target",
       position: Position.Left,

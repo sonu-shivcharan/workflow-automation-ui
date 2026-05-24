@@ -9,18 +9,19 @@ export const Button = React.forwardRef(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const variantClass = `btn-${variant}`;
     const sizeClass = `btn-size-${size}`;
-    const combinedClassName = `btn ${variantClass} ${sizeClass} ${className}`.trim();
+    const combinedClassName =
+      `btn ${variantClass} ${sizeClass} ${className}`.trim();
 
     return (
       <button ref={ref} className={combinedClassName} {...props}>
         {children}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";
