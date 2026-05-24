@@ -64,6 +64,7 @@ export const DbNode = ({ id, data }) => {
             fontFamily: "monospace",
             boxSizing: "border-box",
           }}
+          className="base-node-input"
         />
       </div>
     </BaseNode>

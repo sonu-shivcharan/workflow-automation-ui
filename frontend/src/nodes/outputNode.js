@@ -61,6 +61,7 @@ export const OutputNode = ({ id, data }) => {
             background: "#fff",
             boxSizing: "border-box",
           }}
+          
         >
           <option value="Text">Text</option>
           <option value="File">Image</option>

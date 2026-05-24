@@ -1,31 +1,32 @@
 :root {
-  /* Colors */
-  --color-white: #ffffff;
-  --color-black: #000000;
-  --color-slate-50: #f8fafc;
-  --color-slate-100: #f1f5f9;
-  --color-slate-200: #e2e8f0;
-  --color-slate-300: #cbd5e1;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-900: #0f172a;
+  /* Dark Theme Colors */
+  --color-white: #0f172a;
+  --color-black: #ffffff;
+  
+  --color-slate-50: #020617;
+  --color-slate-100: #0f172a;
+  --color-slate-200: #1e293b;
+  --color-slate-300: #334155;
+  --color-slate-400: #475569;
+  --color-slate-500: #94a3b8;
+  --color-slate-900: #f8fafc;
 
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-700: #374151;
-  --color-gray-900: #111827;
+  --color-gray-100: #1f2937;
+  --color-gray-200: #374151;
+  --color-gray-700: #d1d5db;
+  --color-gray-900: #f3f4f6;
 
   --color-blue-500: #3b82f6;
   --color-blue-600: #2563eb;
-  --color-blue-primary: #2674f1;
-  --color-blue-bg: rgba(128, 176, 254, 0.1);
+  --color-blue-primary: #60a5fa;
+  --color-blue-bg: rgba(59, 130, 246, 0.15);
 
-  --color-indigo-600: #4f46e5;
+  --color-indigo-600: #6366f1;
 
   --color-red-500: #ef4444;
   --color-red-600: #dc2626;
 
-  --color-border-dark: #ccc;
+  --color-border-dark: #334155;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -55,6 +56,8 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -157,7 +160,26 @@ body {
   box-shadow: var(--shadow-btn);
 }
 .btn-default:hover {
-  background-color: rgba(15, 23, 42, 0.9);
+  background-color: var(--color-slate-900);
+  opacity: 0.9;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--color-blue-500) 0%, var(--color-indigo-600) 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-submit:hover {
+  background: linear-gradient(135deg, var(--color-blue-600) 0%, #4f46e5 100%);
+  box-shadow: 0 6px 14px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+.btn-submit:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
 }
 
 .btn-destructive {
@@ -365,6 +387,8 @@ body {
     border-color 0.15s ease,
     box-shadow 0.15s ease;
   box-sizing: border-box;
+  background-color: transparent;
+  color: var(--color-slate-900);
 }
 
 .base-node-input:focus {
@@ -386,12 +410,16 @@ body {
 
 /* Toolbar & UI styles */
 .pipeline-toolbar {
-  padding: 16px;
+  padding: 16px 24px;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-slate-200);
   box-shadow: var(--shadow-sm);
   z-index: 100;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .pipeline-toolbar-nodes {
@@ -443,6 +471,6 @@ body {
 
 .pipeline-ui-container {
   width: 100vw;
-  height: 85vh;
+  flex: 1;
   background-color: var(--color-slate-50);
 }

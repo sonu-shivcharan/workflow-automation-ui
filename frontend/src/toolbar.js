@@ -1,4 +1,5 @@
 import { DraggableNode } from "./draggableNode";
+import { SubmitButton } from "./submit";
 import {
   LogIn,
   Sparkles,
@@ -8,7 +9,6 @@ import {
   StarIcon,
   Globe,
   GitBranch,
-  FileCode,
 } from "lucide-react";
 
 const NODE_TYPES = [
@@ -37,6 +37,9 @@ export const PipelineToolbar = () => {
             />
           );
         })}
+      </div>
+      <div className="pipeline-toolbar-actions">
+        <SubmitButton />
       </div>
     </div>
   );
