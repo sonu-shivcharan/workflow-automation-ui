@@ -13,6 +13,7 @@ import { TextNode } from "./nodes/textNode";
 import { DbNode } from "./nodes/dbNode";
 import { SummarizeNode } from "./nodes/summarizeNode";
 import { ApiNode } from "./nodes/apiNode";
+import { NotificationNode } from "./nodes/notificationNode";
 import { ConditionNode } from "./nodes/conditionNode";
 
 import "reactflow/dist/style.css";
@@ -27,6 +28,7 @@ const nodeTypes = {
   db: DbNode,
   summarize: SummarizeNode,
   api: ApiNode,
+  notification: NotificationNode,
   condition: ConditionNode,
 };
 

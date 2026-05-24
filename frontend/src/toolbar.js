@@ -9,6 +9,7 @@ import {
   StarIcon,
   Globe,
   GitBranch,
+  Bell,
 } from "lucide-react";
 
 const NODE_TYPES = [
@@ -19,6 +20,7 @@ const NODE_TYPES = [
   { type: "db", label: "Database", icon: Database },
   { type: "summarize", label: "Summarize", icon: StarIcon },
   { type: "api", label: "API Request", icon: Globe },
+  { type: "notification", label: "Notification", icon: Bell },
   { type: "condition", label: "Condition", icon: GitBranch },
 ];
 

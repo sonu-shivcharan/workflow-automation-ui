@@ -34,6 +34,12 @@ export const NodeConfigs = {
     sourceHandle: "response",
     canBeVariable: true,
   },
+  notification: {
+    nameField: "notificationName",
+    defaultPrefix: "notification_",
+    sourceHandle: "status",
+    canBeVariable: false,
+  },
 };
 
 // Helper function to dynamically derive a node's display name
