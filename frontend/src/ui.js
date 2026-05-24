@@ -12,6 +12,8 @@ import { OutputNode } from "./nodes/outputNode";
 import { TextNode } from "./nodes/textNode";
 import { DbNode } from "./nodes/dbNode";
 import { SummarizeNode } from "./nodes/summarizeNode";
+import { ApiNode } from "./nodes/apiNode";
+import { ConditionNode } from "./nodes/conditionNode";
 
 import "reactflow/dist/style.css";
 
@@ -24,6 +26,8 @@ const nodeTypes = {
   text: TextNode,
   db: DbNode,
   summarize: SummarizeNode,
+  api: ApiNode,
+  condition: ConditionNode,
 };
 
 const selector = (state) => ({
