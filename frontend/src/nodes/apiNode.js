@@ -43,7 +43,16 @@ export function ApiNode({ id, data }) {
     >
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label style={{ fontSize: "10px", fontWeight: "600", color: "#64748b", textTransform: "uppercase" }}>URL</label>
+          <label
+            style={{
+              fontSize: "10px",
+              fontWeight: "600",
+              color: "#64748b",
+              textTransform: "uppercase",
+            }}
+          >
+            URL
+          </label>
           <HighlightedInput
             nodeId={id}
             value={data?.url || "https://api.example.com/{{endpoint}}"}
@@ -53,7 +62,16 @@ export function ApiNode({ id, data }) {
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label style={{ fontSize: "10px", fontWeight: "600", color: "#64748b", textTransform: "uppercase" }}>Body (JSON)</label>
+          <label
+            style={{
+              fontSize: "10px",
+              fontWeight: "600",
+              color: "#64748b",
+              textTransform: "uppercase",
+            }}
+          >
+            Body (JSON)
+          </label>
           <HighlightedInput
             nodeId={id}
             value={data?.body || '{ "data": "{{input}}" }'}
