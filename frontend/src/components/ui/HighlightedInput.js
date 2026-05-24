@@ -1,19 +1,99 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import Editor from "react-simple-code-editor";
 import { useStore } from "../../store";
-import { getNodeName, canNodeBeVariable } from "../../nodeConfig";
+import {
+  getNodeName,
+  canNodeBeVariable,
+  getSourceHandleId,
+} from "../../nodeConfig";
+import { useUpdateNodeInternals } from "reactflow";
 
 export const HighlightedInput = ({
-  value = "",
-  onChange,
+  value = "{{input}}",
+  fieldName = "text",
   placeholder = "",
   style = {},
+  nodeId,
+  onVariablesChange,
 }) => {
+  const [currText, setCurrText] = useState(value);
+  const updateNodeField = useStore((state) => state.updateNodeField);
   const nodes = useStore((state) => state.nodes);
+  const edges = useStore((state) => state.edges);
+  const onConnect = useStore((state) => state.onConnect);
+  const updateNodeInternals = useUpdateNodeInternals();
 
   // Dynamically extract all node names to be used as autocomplete variables
   // Only include nodes that have source handles (they can output data)
-  const variables = nodes.filter(canNodeBeVariable).map(getNodeName);
+  const availableVariables = nodes.filter(canNodeBeVariable).map(getNodeName);
+
+  // Extract variables dynamically from the current text value
+  const matches = useMemo(() => {
+    const regex = /\{\{([a-zA-Z0-9_$]+)\}\}/g;
+    return [...currText.matchAll(regex)];
+  }, [currText]);
+
+  const extractedVariables = useMemo(() => {
+    return [...new Set(matches.map((m) => m[1]))];
+  }, [matches]);
+
+  const variablesStr = extractedVariables.join(",");
+
+  useEffect(() => {
+    if (onVariablesChange) {
+      onVariablesChange(extractedVariables);
+    }
+  }, [variablesStr, extractedVariables, onVariablesChange]);
+
+  useEffect(() => {
+    if (nodeId) {
+      // Delay to allow parent component to render new handles
+      const timer = setTimeout(() => {
+        updateNodeInternals(nodeId);
+      }, 20);
+      return () => clearTimeout(timer);
+    }
+  }, [variablesStr, nodeId, updateNodeInternals]);
+
+  useEffect(() => {
+    if (!nodeId) return;
+    extractedVariables.forEach((variable) => {
+      const matchedNode = nodes.find((node) => {
+        if (!canNodeBeVariable(node)) return false;
+        return getNodeName(node) === variable;
+      });
+      if (matchedNode) {
+        const sourceHandle = getSourceHandleId(matchedNode);
+        const targetHandle = `${nodeId}-${variable}`;
+        if (sourceHandle) {
+          const edgeExists = edges.some(
+            (e) =>
+              e.source === matchedNode.id &&
+              e.sourceHandle === sourceHandle &&
+              e.target === nodeId &&
+              e.targetHandle === targetHandle,
+          );
+          if (!edgeExists) {
+            console.log("Auto-connecting", {
+              source: matchedNode.id,
+              sourceHandle: sourceHandle,
+              target: nodeId,
+              targetHandle: targetHandle,
+            });
+            setTimeout(() => {
+              onConnect({
+                source: matchedNode.id,
+                sourceHandle: sourceHandle,
+                target: nodeId,
+                targetHandle: targetHandle,
+              });
+            }, 100);
+          }
+        }
+      }
+    });
+  }, [currText, nodes, edges, nodeId, onConnect, extractedVariables]);
+
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 38, left: 0 });
   const [filteredVariables, setFilteredVariables] = useState([]);
@@ -51,7 +131,7 @@ export const HighlightedInput = ({
       !/\s/.test(queryText);
 
     if (isValidQuery) {
-      const filtered = variables.filter((v) =>
+      const filtered = availableVariables.filter((v) =>
         v.toLowerCase().startsWith(queryText.toLowerCase()),
       );
 
@@ -101,9 +181,10 @@ export const HighlightedInput = ({
     }
   };
 
-  const handleChange = (val) => {
-    if (onChange) {
-      onChange(val);
+  const handleTextChange = (val) => {
+    setCurrText(val);
+    if (nodeId) {
+      updateNodeField(nodeId, fieldName, val);
     }
   };
 
@@ -126,7 +207,7 @@ export const HighlightedInput = ({
       textarea.removeEventListener("click", handleEvent);
       textarea.removeEventListener("keyup", handleEvent);
     };
-  }, [value]);
+  }, [currText]);
 
   const insertVariable = (variable) => {
     if (!containerRef.current || activeTriggerIndex === -1) return;
@@ -134,15 +215,13 @@ export const HighlightedInput = ({
     if (!textarea) return;
 
     const selectionEnd = textarea.selectionEnd;
-    const beforeText = value.substring(0, activeTriggerIndex + 2); // Keep "{{"
-    const afterText = value.substring(selectionEnd);
+    const beforeText = currText.substring(0, activeTriggerIndex + 2); // Keep "{{"
+    const afterText = currText.substring(selectionEnd);
 
     const newText = beforeText + variable + "}}" + afterText;
     const newCursorPos = activeTriggerIndex + 4 + variable.length;
 
-    if (onChange) {
-      onChange(newText);
-    }
+    handleTextChange(newText);
     setShowMenu(false);
 
     // Refocus the textarea and set the selection range
@@ -192,49 +271,20 @@ export const HighlightedInput = ({
   return (
     <div
       ref={containerRef}
-      style={{
-        position: "relative",
-        border: isFocused ? "1px solid #3b82f6" : "1px solid #ccc",
-        boxShadow: isFocused ? "0 0 0 3px rgba(59, 130, 246, 0.15)" : "none",
-        borderRadius: 6,
-        background: "#fff",
-        boxSizing: "border-box",
-        width: "100%",
-        minHeight: 38,
-        display: "flex",
-        alignItems: "stretch",
-        overflow: "visible",
-        transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-        ...style,
-      }}
+      className={`highlighted-input-container ${isFocused ? "focused" : ""}`}
+      style={style}
     >
-      <div
-        style={{
-          flex: 1,
-          width: "100%",
-          minHeight: "100%",
-          display: "flex",
-          alignItems: "stretch",
-        }}
-      >
+      <div className="highlighted-input-wrapper">
         <Editor
-          value={value}
-          onValueChange={handleChange}
+          value={currText}
+          onValueChange={handleTextChange}
           highlight={highlightCode}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
           onBlur={handleBlur}
           padding={8}
           placeholder={placeholder}
-          style={{
-            fontFamily: "arial, sans-serif",
-            fontSize: "14px",
-            lineHeight: "20px",
-            width: "100%",
-            minHeight: "100%",
-            outline: "none",
-            boxSizing: "border-box",
-          }}
+          className="highlighted-input-editor"
         />
       </div>
 
