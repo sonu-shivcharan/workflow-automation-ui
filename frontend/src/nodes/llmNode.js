@@ -1,34 +1,49 @@
-// llmNode.js
-
-import { Handle, Position } from 'reactflow';
+import { useState } from "react";
+import { Position } from "reactflow";
+import BaseNode from "./baseNode";
+import { Sparkles } from "lucide-react";
+import { useStore } from "../store";
 
 export const LLMNode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
+  const [currName, setCurrName] = useState(
+    data?.llmName || id.replace("llm-", "llm_")
+  );
+
+  const handleNameChange = (e) => {
+    const val = e.target.value;
+    setCurrName(val);
+    updateNodeField(id, "llmName", val);
+  };
+
+  const handles = [
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-system`,
+      style: { top: `${100 / 3}%` },
+    },
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-prompt`,
+      style: { top: `${200 / 3}%` },
+    },
+    { type: "source", position: Position.Right, id: `${id}-response` },
+  ];
 
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-system`}
-        style={{top: `${100/3}%`}}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-prompt`}
-        style={{top: `${200/3}%`}}
-      />
-      <div>
-        <span>LLM</span>
+    <BaseNode
+      id={id}
+      type="LLM"
+      icon={<Sparkles size={16} />}
+      handles={handles}
+      nodeName={currName}
+      onNodeNameChange={handleNameChange}
+    >
+      <div style={{ fontSize: "12px", color: "#64748b" }}>
+        This is an LLM node that processes system instructions and prompts.
       </div>
-      <div>
-        <span>This is a LLM.</span>
-      </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id={`${id}-response`}
-      />
-    </div>
+    </BaseNode>
   );
-}
+};
